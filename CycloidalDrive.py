@@ -361,7 +361,7 @@ class DrawCycloReducer():
         try:
             occTrochoidalGear = activeComp.occurrences.addNewComponent(adsk.core.Matrix3D.create())
             compReducer = occTrochoidalGear.component
-        compReducer.name = "Cycloidal reducer"
+            compReducer.name = "Cycloidal reducer"
         except Exception:
             #単一コンポーネント設計では新規作成できないのでrootComponentを利用
             compReducer = design.rootComponent
