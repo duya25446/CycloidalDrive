@@ -361,7 +361,7 @@ class DrawCycloReducer():
         try:
             occTrochoidalGear = activeComp.occurrences.addNewComponent(adsk.core.Matrix3D.create())
             compReducer = occTrochoidalGear.component
-        compReducer.name = "\u6446\u7ebf\u51cf\u901f\u5668"
+            compReducer.name = "\u6446\u7ebf\u51cf\u901f\u5668"
         except Exception:
             #単一コンポーネント設計では新規作成できないのでrootComponentを利用
             compReducer = design.rootComponent
