@@ -50,8 +50,8 @@ USER_CHANGEABLE_ID = [  ID_NES_RR, ID_NES_EA, ID_NES_RGPD, ID_NES_RGPPD, ID_NES_
                      ]
 
 # コマンドの識別データの設定
-COMMAND_NAME = '创建摆线减速器'
-COMMAND_DESCRIPTION = '摆线减速器曲线生成脚本'
+COMMAND_NAME = '\u521b\u5efa\u6446\u7ebf\u51cf\u901f\u5668'
+COMMAND_DESCRIPTION = '\u6446\u7ebf\u51cf\u901f\u5668\u66f2\u7ebf\u751f\u6210\u811a\u672c'
 
 
 ##
@@ -361,7 +361,7 @@ class DrawCycloReducer():
         try:
             occTrochoidalGear = activeComp.occurrences.addNewComponent(adsk.core.Matrix3D.create())
             compReducer = occTrochoidalGear.component
-        compReducer.name = "摆线减速器"
+        compReducer.name = "\u6446\u7ebf\u51cf\u901f\u5668"
         except Exception:
             #単一コンポーネント設計では新規作成できないのでrootComponentを利用
             compReducer = design.rootComponent
@@ -383,13 +383,13 @@ class DrawCycloReducer():
         eaString   = "{:.3g}".format(ea)   + _unitsMgr.defaultLengthUnits   #表示のための丸め+単位
         rpdString  = "{:.3g}".format(rpd)  + _unitsMgr.defaultLengthUnits
         rppdString = "{:.3g}".format(rppd) + _unitsMgr.defaultLengthUnits
-        trochoidSketch.name = "摆线轮"+"(rr:"+str(rr)+" ea:"+eaString+")"   #スケッチ名編集
-        ringPinSketch.name = "外针"+"(rpd:"+rpdString+" rppd:"+rppdString+")"
+        trochoidSketch.name = "\u6446\u7ebf\u8f6e"+"(rr:"+str(rr)+" ea:"+eaString+")"   #スケッチ名編集
+        ringPinSketch.name = "\u5916\u9488"+"(rpd:"+rpdString+" rppd:"+rppdString+")"
 
         #outputDiskPinのスケッチオブジェクト作成
         if drawingParam.isDrawOutputDiskPin:
             outputDiskSketch = compReducer.sketches.add(compReducer.xYConstructionPlane)
-            outputDiskSketch.name = "输出盘销"
+            outputDiskSketch.name = "\u8f93\u51fa\u76d8\u9500"
             skts.append(outputDiskSketch)
 
         for skt in skts:
@@ -639,48 +639,48 @@ def inputsToParameter(commandInputs):
 def settingCommandInputsItem(inputs):
     #item
       #all tab
-    testViewInputs = inputs.addBoolValueInput(ID_TV, "实时预览", False, "", False)
+    testViewInputs = inputs.addBoolValueInput(ID_TV, "\u5b9e\u65f6\u9884\u89c8", False, "", False)
     testViewInputs.isFullWidth = True
       #necessary tab
-    necessaryTabInput = inputs.addTabCommandInput(ID_NECESSARY_TAB, "必要参数")
+    necessaryTabInput = inputs.addTabCommandInput(ID_NECESSARY_TAB, "\u5fc5\u8981\u53c2\u6570")
     necessaryTabChildInputs = necessaryTabInput.children
         #necessary tab item
     necImageInputs = necessaryTabChildInputs.addImageCommandInput(ID_NES_IMG, "", "image/cyclo_nec.png")
     necImageInputs.isFullWidth = True
-    reducationRatioInput = necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_RR, '减速比', 2, 99999, 1, 10)
-    reducationRatioInput.tooltip = "减速比 = 外针数量-1 = 摆线轮齿数"
-    necessaryTabChildInputs.addValueInput(ID_NES_EA,   "偏心量",        "mm", adsk.core.ValueInput.createByReal(0.2))
-    necessaryTabChildInputs.addValueInput(ID_NES_RGPD, '外针直径',       'mm', adsk.core.ValueInput.createByReal(1.0))
-    necessaryTabChildInputs.addValueInput(ID_NES_RGPPD,'外针节圆直径', 'mm', adsk.core.ValueInput.createByReal(8.0))
-    necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_CGPN, "每齿采样点数", 2, 99999, 1, 6)
-    necessaryTabChildInputs.addTextBoxCommandInput(ID_NES_MPA, "最小压力角", "-", 1, True)
+    reducationRatioInput = necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_RR, '\u51cf\u901f\u6bd4', 2, 99999, 1, 10)
+    reducationRatioInput.tooltip = "\u51cf\u901f\u6bd4 = \u5916\u9488\u6570\u91cf-1 = \u6446\u7ebf\u8f6e\u9f7f\u6570"
+    necessaryTabChildInputs.addValueInput(ID_NES_EA,   "\u504f\u5fc3\u91cf",        "mm", adsk.core.ValueInput.createByReal(0.2))
+    necessaryTabChildInputs.addValueInput(ID_NES_RGPD, '\u5916\u9488\u76f4\u5f84',       'mm', adsk.core.ValueInput.createByReal(1.0))
+    necessaryTabChildInputs.addValueInput(ID_NES_RGPPD,'\u5916\u9488\u8282\u5706\u76f4\u5f84', 'mm', adsk.core.ValueInput.createByReal(8.0))
+    necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_CGPN, "\u6bcf\u9f7f\u91c7\u6837\u70b9\u6570", 2, 99999, 1, 6)
+    necessaryTabChildInputs.addTextBoxCommandInput(ID_NES_MPA, "\u6700\u5c0f\u538b\u529b\u89d2", "-", 1, True)
       #optionary tab
-    optionTabInput = inputs.addTabCommandInput(ID_OPTIONAL_TAB, "可选参数")
+    optionTabInput = inputs.addTabCommandInput(ID_OPTIONAL_TAB, "\u53ef\u9009\u53c2\u6570")
     optionTabChildInputs = optionTabInput.children
         #optionary item
     optImageInputs = optionTabChildInputs.addImageCommandInput(ID_OPT_IMG, "", "image/cyclo_opt.png")
     optImageInputs.isFullWidth = True
           #centor hole group
-    centorHoleGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_CH_GROUP, "摆线轮中心孔")
+    centorHoleGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_CH_GROUP, "\u6446\u7ebf\u8f6e\u4e2d\u5fc3\u5b54")
     centorHoleInputs = centorHoleGroup.children
-    centorHoleInputs.addBoolValueInput(ID_OPT_CGH_DR, "绘制中心孔", True, "", False)
-    centorHoleInputs.addValueInput(ID_OPT_CGH_D, "直径", "mm", adsk.core.ValueInput.createByReal(1.6))
+    centorHoleInputs.addBoolValueInput(ID_OPT_CGH_DR, "\u7ed8\u5236\u4e2d\u5fc3\u5b54", True, "", False)
+    centorHoleInputs.addValueInput(ID_OPT_CGH_D, "\u76f4\u5f84", "mm", adsk.core.ValueInput.createByReal(1.6))
           #trochoid hole to output disk pin group
-    trochoidToOutputGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_TGTOD_GROUP, "摆线轮与输出盘")
+    trochoidToOutputGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_TGTOD_GROUP, "\u6446\u7ebf\u8f6e\u4e0e\u8f93\u51fa\u76d8")
     trochoidToOutputInputs = trochoidToOutputGroup.children
-    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_CAH, "绘制周孔", True, "", False)
-    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_DP, "绘制输出盘销", True, "", False)
+    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_CAH, "\u7ed8\u5236\u5468\u5b54", True, "", False)
+    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_DP, "\u7ed8\u5236\u8f93\u51fa\u76d8\u9500", True, "", False)
             #trochoid hole to output disk pin item
-    holeOrPinSelectInputs = trochoidToOutputInputs.addDropDownCommandInput(ID_OPT_CHOTGOD, "设置对象", adsk.core.DropDownStyles.LabeledIconDropDownStyle)
+    holeOrPinSelectInputs = trochoidToOutputInputs.addDropDownCommandInput(ID_OPT_CHOTGOD, "\u8bbe\u7f6e\u5bf9\u8c61", adsk.core.DropDownStyles.LabeledIconDropDownStyle)
     holeOrPinSelectListItems = holeOrPinSelectInputs.listItems
-    holeOrPinSelectListItems.add("摆线轮孔", True)
-    holeOrPinSelectListItems.add("输出盘销", False)
-    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_AN, "孔数量", 2, 99999, 1, 8)
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_AD,  "孔直径",           "mm", adsk.core.ValueInput.createByReal(1.2))
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_APD, "中心到孔距", "mm", adsk.core.ValueInput.createByReal(4.2))
-    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_ON, "销数量", 2, 99999, 1, 8)
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OD,  "销直径",            "mm", adsk.core.ValueInput.createByReal(0.8))
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OPD, "中心到销距",  "mm", adsk.core.ValueInput.createByReal(4.2))
+    holeOrPinSelectListItems.add("\u6446\u7ebf\u8f6e\u5b54", True)
+    holeOrPinSelectListItems.add("\u8f93\u51fa\u76d8\u9500", False)
+    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_AN, "\u5b54\u6570\u91cf", 2, 99999, 1, 8)
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_AD,  "\u5b54\u76f4\u5f84",           "mm", adsk.core.ValueInput.createByReal(1.2))
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_APD, "\u4e2d\u5fc3\u5230\u5b54\u8ddd", "mm", adsk.core.ValueInput.createByReal(4.2))
+    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_ON, "\u9500\u6570\u91cf", 2, 99999, 1, 8)
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OD,  "\u9500\u76f4\u5f84",            "mm", adsk.core.ValueInput.createByReal(0.8))
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OPD, "\u4e2d\u5fc3\u5230\u9500\u8ddd",  "mm", adsk.core.ValueInput.createByReal(4.2))
         #both mode item
     # optionTabChildInputs.addTextBoxCommandInput(ID_P_ET, "error text", "", 3, True)
       #draw tab
@@ -727,7 +727,7 @@ class MyCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
 
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('\u5931\u8d25:\n{}'.format(traceback.format_exc()))
 
 # @brief commandInputsのitemのvalueをデザインのattributesに保存する
 # @param commandInputs[CommandInputs Object] 保存したい状態のcommandInputs
@@ -860,7 +860,7 @@ class MyCommandValidateInputsHandler(adsk.core.ValidateInputsEventHandler):
 
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('\u5931\u8d25:\n{}'.format(traceback.format_exc()))
 
 # Event handler for the executePreview event.
 class MyExecutePreviewHandler(adsk.core.CommandEventHandler):
@@ -884,7 +884,7 @@ class MyExecutePreviewHandler(adsk.core.CommandEventHandler):
                 DrawCycloReducer(inputs)
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('\u5931\u8d25:\n{}'.format(traceback.format_exc()))
 
 # 入力ダイアログで入力された値を取り出すクラス
 # 入力ダイアログ・クラスにonValidateInputsイベントを設定して使用する
@@ -903,7 +903,7 @@ class MyCommandExecuteHandler(adsk.core.CommandEventHandler):
 
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('\u5931\u8d25:\n{}'.format(traceback.format_exc()))
 
 # 終了処理
 class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
@@ -916,7 +916,7 @@ class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
             adsk.terminate()
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('\u5931\u8d25:\n{}'.format(traceback.format_exc()))
 
 def run(context):
     global _app, _ui, _unitsMgr
