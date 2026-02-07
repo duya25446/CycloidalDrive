@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import adsk.core, adsk.fusion, traceback
 import math, time
 from collections import namedtuple
