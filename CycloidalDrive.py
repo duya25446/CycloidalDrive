@@ -49,8 +49,8 @@ USER_CHANGEABLE_ID = [  ID_NES_RR, ID_NES_EA, ID_NES_RGPD, ID_NES_RGPPD, ID_NES_
                      ]
 
 # コマンドの識別データの設定
-COMMAND_NAME = 'create cyclo reducer'
-COMMAND_DESCRIPTION = 'サイクロ減速機用曲線作成スクリプト'
+COMMAND_NAME = '创建摆线减速器'
+COMMAND_DESCRIPTION = '摆线减速器曲线生成脚本'
 
 
 ##
@@ -360,7 +360,7 @@ class DrawCycloReducer():
         try:
             occTrochoidalGear = activeComp.occurrences.addNewComponent(adsk.core.Matrix3D.create())
             compReducer = occTrochoidalGear.component
-            compReducer.name = "Cycloidal reducer"
+        compReducer.name = "摆线减速器"
         except Exception:
             #単一コンポーネント設計では新規作成できないのでrootComponentを利用
             compReducer = design.rootComponent
@@ -382,13 +382,13 @@ class DrawCycloReducer():
         eaString   = "{:.3g}".format(ea)   + _unitsMgr.defaultLengthUnits   #表示のための丸め+単位
         rpdString  = "{:.3g}".format(rpd)  + _unitsMgr.defaultLengthUnits
         rppdString = "{:.3g}".format(rppd) + _unitsMgr.defaultLengthUnits
-        trochoidSketch.name = "Cycloidal gear"+"(rr:"+str(rr)+" ea:"+eaString+")"   #スケッチ名編集
-        ringPinSketch.name = "Ring pins"+"(rpd:"+rpdString+" rppd:"+rppdString+")"
+        trochoidSketch.name = "摆线轮"+"(rr:"+str(rr)+" ea:"+eaString+")"   #スケッチ名編集
+        ringPinSketch.name = "外针"+"(rpd:"+rpdString+" rppd:"+rppdString+")"
 
         #outputDiskPinのスケッチオブジェクト作成
         if drawingParam.isDrawOutputDiskPin:
             outputDiskSketch = compReducer.sketches.add(compReducer.xYConstructionPlane)
-            outputDiskSketch.name = "Output disk pin"
+            outputDiskSketch.name = "输出盘销"
             skts.append(outputDiskSketch)
 
         for skt in skts:
@@ -638,48 +638,48 @@ def inputsToParameter(commandInputs):
 def settingCommandInputsItem(inputs):
     #item
       #all tab
-    testViewInputs = inputs.addBoolValueInput(ID_TV, "Test view", False, "", False)
+    testViewInputs = inputs.addBoolValueInput(ID_TV, "实时预览", False, "", False)
     testViewInputs.isFullWidth = True
       #necessary tab
-    necessaryTabInput = inputs.addTabCommandInput(ID_NECESSARY_TAB, "Necessary param")
+    necessaryTabInput = inputs.addTabCommandInput(ID_NECESSARY_TAB, "必要参数")
     necessaryTabChildInputs = necessaryTabInput.children
         #necessary tab item
     necImageInputs = necessaryTabChildInputs.addImageCommandInput(ID_NES_IMG, "", "image/cyclo_nec.png")
     necImageInputs.isFullWidth = True
-    reducationRatioInput = necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_RR, 'Raducation ratio', 2, 99999, 1, 10)
-    reducationRatioInput.tooltip = "ReducationRatio = RingPinNum-1 = cycloidalGear's thooth num"
-    necessaryTabChildInputs.addValueInput(ID_NES_EA,   "Eccentric amount",        "mm", adsk.core.ValueInput.createByReal(0.2))
-    necessaryTabChildInputs.addValueInput(ID_NES_RGPD, 'Ring pin diameter',       'mm', adsk.core.ValueInput.createByReal(1.0))
-    necessaryTabChildInputs.addValueInput(ID_NES_RGPPD,'Ring pin pitch diameter', 'mm', adsk.core.ValueInput.createByReal(8.0))
-    necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_CGPN, "Cycloidal curve plot num par thooth", 2, 99999, 1, 6)
-    necessaryTabChildInputs.addTextBoxCommandInput(ID_NES_MPA, "minimum Pressure angle", "-", 1, True)
+    reducationRatioInput = necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_RR, '减速比', 2, 99999, 1, 10)
+    reducationRatioInput.tooltip = "减速比 = 外针数量-1 = 摆线轮齿数"
+    necessaryTabChildInputs.addValueInput(ID_NES_EA,   "偏心量",        "mm", adsk.core.ValueInput.createByReal(0.2))
+    necessaryTabChildInputs.addValueInput(ID_NES_RGPD, '外针直径',       'mm', adsk.core.ValueInput.createByReal(1.0))
+    necessaryTabChildInputs.addValueInput(ID_NES_RGPPD,'外针节圆直径', 'mm', adsk.core.ValueInput.createByReal(8.0))
+    necessaryTabChildInputs.addIntegerSpinnerCommandInput(ID_NES_CGPN, "每齿采样点数", 2, 99999, 1, 6)
+    necessaryTabChildInputs.addTextBoxCommandInput(ID_NES_MPA, "最小压力角", "-", 1, True)
       #optionary tab
-    optionTabInput = inputs.addTabCommandInput(ID_OPTIONAL_TAB, "Optionary param")
+    optionTabInput = inputs.addTabCommandInput(ID_OPTIONAL_TAB, "可选参数")
     optionTabChildInputs = optionTabInput.children
         #optionary item
     optImageInputs = optionTabChildInputs.addImageCommandInput(ID_OPT_IMG, "", "image/cyclo_opt.png")
     optImageInputs.isFullWidth = True
           #centor hole group
-    centorHoleGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_CH_GROUP, "Cycloidal gear centor hole")
+    centorHoleGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_CH_GROUP, "摆线轮中心孔")
     centorHoleInputs = centorHoleGroup.children
-    centorHoleInputs.addBoolValueInput(ID_OPT_CGH_DR, "Draw centor hole", True, "", False)
-    centorHoleInputs.addValueInput(ID_OPT_CGH_D, "Diameter", "mm", adsk.core.ValueInput.createByReal(1.6))
+    centorHoleInputs.addBoolValueInput(ID_OPT_CGH_DR, "绘制中心孔", True, "", False)
+    centorHoleInputs.addValueInput(ID_OPT_CGH_D, "直径", "mm", adsk.core.ValueInput.createByReal(1.6))
           #trochoid hole to output disk pin group
-    trochoidToOutputGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_TGTOD_GROUP, "Cycloidal gear to output disk")
+    trochoidToOutputGroup = optionTabChildInputs.addGroupCommandInput(ID_OPT_TGTOD_GROUP, "摆线轮与输出盘")
     trochoidToOutputInputs = trochoidToOutputGroup.children
-    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_CAH, "Draw around hole", True, "", False)
-    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_DP, "Draw output disk pin", True, "", False)
+    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_CAH, "绘制周孔", True, "", False)
+    trochoidToOutputInputs.addBoolValueInput(ID_OPT_DR_DP, "绘制输出盘销", True, "", False)
             #trochoid hole to output disk pin item
-    holeOrPinSelectInputs = trochoidToOutputInputs.addDropDownCommandInput(ID_OPT_CHOTGOD, "Set about", adsk.core.DropDownStyles.LabeledIconDropDownStyle)
+    holeOrPinSelectInputs = trochoidToOutputInputs.addDropDownCommandInput(ID_OPT_CHOTGOD, "设置对象", adsk.core.DropDownStyles.LabeledIconDropDownStyle)
     holeOrPinSelectListItems = holeOrPinSelectInputs.listItems
-    holeOrPinSelectListItems.add("Cycloidal gear hole", True)
-    holeOrPinSelectListItems.add("Output disk pin", False)
-    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_AN, "Hole num", 2, 99999, 1, 8)
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_AD,  "Hole diameter",           "mm", adsk.core.ValueInput.createByReal(1.2))
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_APD, "Centor to hole distance", "mm", adsk.core.ValueInput.createByReal(4.2))
-    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_ON, "Pin num", 2, 99999, 1, 8)
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OD,  "Pin diameter",            "mm", adsk.core.ValueInput.createByReal(0.8))
-    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OPD, "Centor to pin distance",  "mm", adsk.core.ValueInput.createByReal(4.2))
+    holeOrPinSelectListItems.add("摆线轮孔", True)
+    holeOrPinSelectListItems.add("输出盘销", False)
+    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_AN, "孔数量", 2, 99999, 1, 8)
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_AD,  "孔直径",           "mm", adsk.core.ValueInput.createByReal(1.2))
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_APD, "中心到孔距", "mm", adsk.core.ValueInput.createByReal(4.2))
+    trochoidToOutputInputs.addIntegerSpinnerCommandInput(ID_OPT_CHOTGOD_ON, "销数量", 2, 99999, 1, 8)
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OD,  "销直径",            "mm", adsk.core.ValueInput.createByReal(0.8))
+    trochoidToOutputInputs.addValueInput(ID_OPT_CHOTGOD_OPD, "中心到销距",  "mm", adsk.core.ValueInput.createByReal(4.2))
         #both mode item
     # optionTabChildInputs.addTextBoxCommandInput(ID_P_ET, "error text", "", 3, True)
       #draw tab
@@ -726,7 +726,7 @@ class MyCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
 
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
 
 # @brief commandInputsのitemのvalueをデザインのattributesに保存する
 # @param commandInputs[CommandInputs Object] 保存したい状態のcommandInputs
@@ -859,7 +859,7 @@ class MyCommandValidateInputsHandler(adsk.core.ValidateInputsEventHandler):
 
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
 
 # Event handler for the executePreview event.
 class MyExecutePreviewHandler(adsk.core.CommandEventHandler):
@@ -883,7 +883,7 @@ class MyExecutePreviewHandler(adsk.core.CommandEventHandler):
                 DrawCycloReducer(inputs)
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
 
 # 入力ダイアログで入力された値を取り出すクラス
 # 入力ダイアログ・クラスにonValidateInputsイベントを設定して使用する
@@ -902,7 +902,7 @@ class MyCommandExecuteHandler(adsk.core.CommandEventHandler):
 
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
 
 # 終了処理
 class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
@@ -915,7 +915,7 @@ class MyCommandDestroyHandler(adsk.core.CommandEventHandler):
             adsk.terminate()
         except:    #定型エラー処理文
             if _ui:
-                _ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+                _ui.messageBox('失败:\n{}'.format(traceback.format_exc()))
 
 def run(context):
     global _app, _ui, _unitsMgr
