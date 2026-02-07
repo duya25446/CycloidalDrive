@@ -357,9 +357,13 @@ class DrawCycloReducer():
         activeComp = design.activeOccurrence.component if design.activeOccurrence else  design.rootComponent
 
         #部品の親となるコンポーネント
-        occTrochoidalGear = activeComp.occurrences.addNewComponent(adsk.core.Matrix3D.create())
-        compReducer = occTrochoidalGear.component
-        compReducer.name = "Cycloidal reducer"
+        try:
+            occTrochoidalGear = activeComp.occurrences.addNewComponent(adsk.core.Matrix3D.create())
+            compReducer = occTrochoidalGear.component
+            compReducer.name = "Cycloidal reducer"
+        except Exception:
+            #単一コンポーネント設計では新規作成できないのでrootComponentを利用
+            compReducer = design.rootComponent
 
         self.cycoroidDecelerator = CycloidalReducer(int(drawingParam.ringPinNum), drawingParam.ringPinDia/2.0,
                                                     drawingParam.ringPinPitchDia/2.0,  drawingParam.eccentricAmount)
@@ -401,7 +405,7 @@ class DrawCycloReducer():
             self.createOutputDisk(outputDiskSketch, drawingParam)
 
         for skt in skts:
-            skt.isComputeDeferred = False   #スケッチ計算を一旦OFFを戻す
+            skt.isComputeDeferred = False   #スケッチ計算を一旦OFFを戻す   #スケッチ計算を一旦OFFを戻す
 
     def createTrochoidalGear(self, sketch, drawingParam):
         sketchOriginPoint = sketch.originPoint
