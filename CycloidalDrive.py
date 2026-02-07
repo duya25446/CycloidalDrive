@@ -584,8 +584,8 @@ def inputsToParameter(commandInputs):
                                 "eccentricAmount", "plotDotNum",
                                 "troGearAroundHoleNum", "troGearAroundHoleDia", "troGearAroundHolePosDia",
                                 "troGearCentorHoleDia",
-                                "outDiskPinNum", "outDiskPinDia","outDiskPinPosDia"
-                                "isDrawTrochoidalGear", "isDrawRingPin","isDrawCentorHole", "isDrawAroundHole","isDrawOutputDiskPin"
+                                "outDiskPinNum", "outDiskPinDia", "outDiskPinPosDia",
+                                "isDrawTrochoidalGear", "isDrawRingPin", "isDrawCentorHole", "isDrawAroundHole", "isDrawOutputDiskPin"
                                 ))
 
 
@@ -631,7 +631,7 @@ def inputsToParameter(commandInputs):
         drawingParam.outDiskPinPosDia = _unitsMgr.evaluateExpression(outDiskPinPosDiaInput.expression)
     return drawingParam
 
-def settingComandInputsItem(inputs):
+def settingCommandInputsItem(inputs):
     #item
       #all tab
     testViewInputs = inputs.addBoolValueInput(ID_TV, "Test view", False, "", False)
@@ -717,7 +717,7 @@ class MyCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
 
             # 入力ダイアログの値は、commandInputsコレクションのinputsの中に入ります。
             inputs = cmd.commandInputs
-            settingComandInputsItem(inputs)
+            settingCommandInputsItem(inputs)
             loadInputsValue(inputs, USER_CHANGEABLE_ID)
 
         except:    #定型エラー処理文
@@ -733,7 +733,7 @@ def saveInputsValues(commandInputs, ids, groupName="lastCommandInputValue"):
     attribs = design.attributes
     for id in ids:
         value = commandInputs.itemById(id).value
-        binaryValue = pickle.dumps(value)   #pickleでオブジェクトをバイナリ化
+        binaryValue = pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL)   #pickleでオブジェクトをバイナリ化
         strValue = binaryValue.hex()        #保存形式に対応させるため、hex化し文字列にする
         attribs.add(groupName, id, strValue)
 
@@ -748,10 +748,13 @@ def loadInputsValue(commandInputs, ids, groupName="lastCommandInputValue"):
     if groupName not in attribs.groupNames:
         return False
     for id in ids:
-        strValue = attribs.itemByName(groupName, id).value
-        binaryValue = bytes.fromhex(strValue)
-        value = pickle.loads(binaryValue)
-        commandInputs.itemById(id).value = value
+        try:
+            strValue = attribs.itemByName(groupName, id).value
+            binaryValue = bytes.fromhex(strValue)
+            value = pickle.loads(binaryValue)
+            commandInputs.itemById(id).value = value
+        except (pickle.UnpicklingError, EOFError, AttributeError) as e:
+            return False
     return True
 
 

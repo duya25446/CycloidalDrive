@@ -2,9 +2,9 @@
 	"autodeskProduct": "Fusion360",
 	"type": "script",
 	"author": "woodenCariper",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description":{
-		"":	"This script create sketchs for cycloidal drive"
+		"":	"This script create sketchs for cycloidal drive - Updated for modern Fusion360"
 	},
 	"supportedOS": "windows|mac",
 	"editEnabled": true

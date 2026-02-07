@@ -1,11 +1,22 @@
 # Fusion360 script for creating Cycloidal Drive sketch
-This can create part of cycloidal drive
+
+**Version 2.0.0** - Updated for modern Fusion360 (2026)
+
+This script can create parts of cycloidal drive:
 * Cycloida gear (gray)
     * Trochoidal parallel curve
     * Centor hole
     * Around hole
 * Ring pin (yellow)
 * Output disk pin (green)
+
+## What's New in v2.0.0
+
+- **Fixed Python syntax errors** to work with modern Fusion360 Python interpreter
+- **Updated namedtuple definition** with proper comma separation
+- **Fixed function name typo** (`settingComandInputsItem` → `settingCommandInputsItem`)
+- **Enhanced pickle compatibility** with protocol versioning and error handling
+- **Updated manifest version** to 2.0.0
 
 <img src="./image/cyclo_Discription_Image_opt.png" width="300">
 
